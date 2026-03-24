@@ -80,6 +80,24 @@ const Navbar = () => {
           >
             <HomeIcon size={16} /> Home
           </Link>
+
+          <Link
+            to="/coding-interview"
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              isActive('/coding-interview') ? 'bg-indigo-500/15 text-indigo-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
+            }`}
+          >
+            Coding Platform
+          </Link>
+
+          <Link
+            to="/about"
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              isActive('/about') ? 'bg-indigo-500/15 text-indigo-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
+            }`}
+          >
+            About
+          </Link>
           
           <ThemeToggle />
           
@@ -141,6 +159,12 @@ const Navbar = () => {
           <div className="space-y-1">
             <Link to="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all text-sm font-medium">
               <HomeIcon size={16} /> Home
+            </Link>
+            <Link to="/coding-interview" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all text-sm font-medium">
+              Coding Platform
+            </Link>
+            <Link to="/about" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-all text-sm font-medium">
+              About
             </Link>
           </div>
           

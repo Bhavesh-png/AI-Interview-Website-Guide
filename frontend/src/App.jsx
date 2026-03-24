@@ -10,6 +10,7 @@ import Result from './pages/Result';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
+import About from './pages/About';
 import Chatbot from './components/Chatbot';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             {/* Public Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/about" element={<About />} />
             <Route path="/" element={<Home />} />
             
             {/* Protected Routes */}
