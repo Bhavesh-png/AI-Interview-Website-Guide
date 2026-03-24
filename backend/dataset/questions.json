@@ -37,11 +37,38 @@
   },
   {
     "id": 5,
-    "role": "hr",
-    "category": "Behavioral",
+    "role": "behavioral",
+    "category": "Soft Skills",
     "difficulty": "easy",
     "question": "Tell me about yourself.",
     "answer": "Introduction focusing on professional background, key skills, and career goals.",
     "tags": ["intro", "personal"]
+  },
+  {
+    "id": 6,
+    "role": "fullstack",
+    "category": "Architecture",
+    "difficulty": "medium",
+    "question": "How do you handle state management between a React frontend and a Node.js backend?",
+    "answer": "By using context APIs or Redux on the frontend and REST/GraphQL APIs with JWT for session management on the backend.",
+    "tags": ["fullstack", "state"]
+  },
+  {
+    "id": 7,
+    "role": "devops",
+    "category": "Docker",
+    "difficulty": "medium",
+    "question": "Explain the difference between a Docker image and a container.",
+    "answer": "An image is a read-only template with instructions for creating a container, while a container is a runnable instance of an image.",
+    "tags": ["docker", "containers"]
+  },
+  {
+    "id": 8,
+    "role": "system-design",
+    "category": "Scalability",
+    "difficulty": "medium",
+    "question": "How would you design a load balancer for a high-traffic website?",
+    "answer": "By using a distribute-and-conquer approach, placing a load balancer (like Nginx or AWS ELB) in front of multiple application servers.",
+    "tags": ["loadbalancer", "scalability"]
   }
 ]

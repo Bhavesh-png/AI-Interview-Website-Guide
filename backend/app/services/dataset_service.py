@@ -13,7 +13,10 @@ def get_questions_from_file():
 
 def get_random_question(role: str, difficulty: str = None):
     questions = get_questions_from_file()
-    filtered = [q for q in questions if q["role"].lower() == role.lower()]
+    if role.lower() == "mixed":
+        filtered = questions
+    else:
+        filtered = [q for q in questions if q["role"].lower() == role.lower()]
     
     if difficulty:
         filtered = [q for q in filtered if q.get("difficulty", "").lower() == difficulty.lower()]

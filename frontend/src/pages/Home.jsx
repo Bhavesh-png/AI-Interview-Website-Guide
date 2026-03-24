@@ -1,66 +1,63 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Code2, Server, Users, ArrowRight, Sparkles, Zap, Shield } from 'lucide-react';
+import { Code2, Server, Users, ArrowRight, Sparkles, Zap, Shield, Layers } from 'lucide-react';
 
 const roles = [
   {
     id: 'frontend',
-    name: 'Frontend Dev',
-    description: 'React, CSS, JavaScript & browser APIs',
+    name: 'Frontend',
+    description: 'React, Vue, Angular, UI/UX patterns',
     icon: Code2,
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-500/20',
-    glow: 'hover:shadow-blue-500/20',
+    gradient: 'from-blue-500 to-cyan-400',
   },
   {
     id: 'backend',
-    name: 'Backend Dev',
-    description: 'APIs, databases, system design',
+    name: 'Backend',
+    description: 'Node.js, Python, APIs, databases',
     icon: Server,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/10',
-    border: 'border-emerald-500/20',
-    glow: 'hover:shadow-emerald-500/20',
+    gradient: 'from-purple-500 to-pink-500',
   },
   {
-    id: 'hr',
-    name: 'HR / Behavioral',
-    description: 'Soft skills, teamwork, leadership',
+    id: 'fullstack',
+    name: 'Full Stack',
+    description: 'Both frontend and backend skills',
+    icon: Layers,
+    gradient: 'from-indigo-500 to-blue-500',
+  },
+  {
+    id: 'devops',
+    name: 'DevOps',
+    description: 'CI/CD, Docker, Kubernetes, deployment',
+    icon: Zap,
+    gradient: 'from-orange-500 to-red-500',
+  },
+  {
+    id: 'behavioral',
+    name: 'Behavioral',
+    description: 'Communication, teamwork, problem-solving',
     icon: Users,
-    color: 'text-purple-400',
-    bg: 'bg-purple-500/10',
-    border: 'border-purple-500/20',
-    glow: 'hover:shadow-purple-500/20',
+    gradient: 'from-emerald-500 to-teal-500',
+  },
+  {
+    id: 'system-design',
+    name: 'System Design',
+    description: 'Architecture, scalability, tradeoffs',
+    icon: Shield,
+    gradient: 'from-amber-500 to-orange-500',
+  },
+  {
+    id: 'mixed',
+    name: 'Mixed',
+    description: 'A mix of questions from all specialties',
+    icon: Sparkles,
+    gradient: 'from-slate-700 to-slate-900',
   },
 ];
-
-const difficulties = [
-  { label: 'Easy', color: 'text-emerald-400', activeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' },
-  { label: 'Medium', color: 'text-amber-400', activeClass: 'bg-amber-500/20 text-amber-300 border-amber-500/40' },
-  { label: 'Hard', color: 'text-red-400', activeClass: 'bg-red-500/20 text-red-300 border-red-500/40' },
-];
-
-const features = [
-  { icon: Sparkles, text: 'AI-powered feedback', color: 'text-indigo-400' },
-  { icon: Zap, text: 'Real-time evaluation', color: 'text-amber-400' },
-  { icon: Shield, text: 'Industry questions', color: 'text-emerald-400' },
-];
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
-};
 
 const Home = () => {
   const navigate = useNavigate();
-  const [selectedRole, setSelectedRole] = React.useState(null);
+  const [selectedRole, setSelectedRole] = React.useState('backend');
   const [difficulty, setDifficulty] = React.useState('Medium');
 
   const handleStart = () => {
@@ -69,122 +66,97 @@ const Home = () => {
     }
   };
 
-  const selectedDiff = difficulties.find(d => d.label === difficulty);
-
   return (
-    <div className="max-w-5xl mx-auto py-8 px-4">
-      {/* Hero */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-center mb-16"
-      >
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-indigo-400 text-sm font-medium mb-6">
-          <Sparkles size={14} />
-          AI-Powered Interview Practice
-        </div>
-        <h1 className="text-5xl sm:text-6xl font-extrabold mb-5 leading-tight">
-          <span className="bg-gradient-to-r from-white via-indigo-200 to-purple-300 bg-clip-text text-transparent">
-            Master Your
-          </span>
-          <br />
-          <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
-            Next Interview
-          </span>
-        </h1>
-        <p className="text-slate-400 text-lg max-w-xl mx-auto leading-relaxed">
-          Practice with AI-powered feedback, real-time evaluation, and curated
-          questions tailored to your role.
-        </p>
+    <div className="min-h-screen bg-[#fcfcfd] flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background soft blurs */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-pink-100/50 rounded-full blur-[120px]" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-100/50 rounded-full blur-[120px]" />
+      <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-yellow-50/50 rounded-full blur-[100px]" />
 
-        {/* Feature pills */}
-        <div className="flex flex-wrap justify-center gap-3 mt-8">
-          {features.map(({ icon: Icon, text, color }) => (
-            <span key={text} className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-sm text-slate-300">
-              <Icon size={14} className={color} />
-              {text}
+      <div className="max-w-4xl w-full relative z-10">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white/70 backdrop-blur-3xl rounded-[2.5rem] p-8 md:p-12 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.08)] border border-white relative overflow-hidden"
+        >
+          {/* Header */}
+          <div className="mb-10 text-left">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#94a3b8] mb-3 block">
+              Choose Interview Branch
             </span>
-          ))}
-        </div>
-      </motion.div>
+            <h1 className="text-4xl font-extrabold text-[#0f172a] mb-3 tracking-tight">
+              Pick your specialty
+            </h1>
+            <p className="text-[#64748b] text-base font-medium">
+              Select a branch below to practice the most relevant interview questions for your role.
+            </p>
+          </div>
 
-      {/* Role Selection */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.p variants={itemVariants} className="text-center text-slate-500 text-sm font-semibold uppercase tracking-widest mb-6">
-          Choose your interview track
-        </motion.p>
-        <div className="grid md:grid-cols-3 gap-4 mb-10">
-          {roles.map((role) => (
-            <motion.div
-              key={role.id}
-              variants={itemVariants}
-              whileHover={{ scale: 1.02, y: -4 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setSelectedRole(role.id)}
-              className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300 shadow-xl ${
-                selectedRole === role.id
-                  ? `border-indigo-500 bg-indigo-500/10 shadow-indigo-500/20`
-                  : `border-white/5 bg-white/[0.03] hover:bg-white/[0.06] ${role.glow}`
-              }`}
-            >
-              {selectedRole === role.id && (
-                <div className="absolute top-3 right-3 w-2 h-2 bg-indigo-400 rounded-full animate-pulse" />
-              )}
-              <div className={`inline-flex p-3 rounded-xl ${role.bg} border ${role.border} mb-4`}>
-                <role.icon className={role.color} size={24} />
-              </div>
-              <h3 className="font-bold text-lg mb-1.5">{role.name}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{role.description}</p>
-            </motion.div>
-          ))}
-        </div>
+          {/* Grid Selection */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+            {roles.map((role) => {
+              const isSelected = selectedRole === role.id;
+              return (
+                <motion.div
+                  key={role.id}
+                  onClick={() => setSelectedRole(role.id)}
+                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`relative p-6 rounded-2xl cursor-pointer transition-all duration-300 group overflow-hidden ${
+                    isSelected
+                      ? `bg-gradient-to-br ${role.id === 'backend' ? 'from-[#bd4be3] to-[#ef4ec0]' : role.gradient} text-white shadow-xl shadow-indigo-200/50`
+                      : 'bg-[#f8fafc]/80 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 border border-slate-100 hover:border-white'
+                  }`}
+                >
+                  {/* Icon Box */}
+                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 transition-all ${
+                    isSelected ? 'bg-white/20' : 'bg-[#f1f5f9]'
+                  }`}>
+                    <role.icon 
+                      size={22} 
+                      className={isSelected ? 'text-white' : 'text-[#64748b] group-hover:text-[#0f172a]'} 
+                    />
+                  </div>
 
-        {/* Difficulty + CTA */}
-        {selectedRole && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="flex flex-col items-center gap-6"
-          >
-            <div>
-              <p className="text-center text-slate-500 text-xs font-semibold uppercase tracking-widest mb-3">
-                Select difficulty
-              </p>
-              <div className="flex gap-2 p-1 bg-slate-900/80 border border-white/10 rounded-xl">
-                {difficulties.map((d) => (
-                  <button
-                    key={d.label}
-                    onClick={() => setDifficulty(d.label)}
-                    className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all border ${
-                      difficulty === d.label
-                        ? `${d.activeClass} shadow-md`
-                        : 'text-slate-400 border-transparent hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    {d.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+                  {/* Text */}
+                  <h3 className={`font-bold text-lg mb-1.5 ${isSelected ? 'text-white' : 'text-[#1e293b]'}`}>
+                    {role.name}
+                  </h3>
+                  <p className={`text-xs leading-relaxed font-medium ${isSelected ? 'text-white/80' : 'text-[#94a3b8]'}`}>
+                    {role.description}
+                  </p>
 
+                  {/* Selection Indicator */}
+                  {isSelected && (
+                    <motion.div 
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute top-5 right-5 text-white"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </motion.div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* CTA Button */}
+          <div className="flex flex-col items-center">
             <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.02, backgroundColor: '#ea580c' }}
+              whileTap={{ scale: 0.98 }}
               onClick={handleStart}
-              className="group flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-2xl transition-all shadow-2xl shadow-indigo-600/30 text-lg"
+              className="w-full py-4.5 bg-[#f97316] text-white text-lg font-bold rounded-2xl transition-all shadow-[0_20px_40px_-10px_rgba(249,115,22,0.4)]"
             >
-              Start Interview
-              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform duration-200" />
+              Start {roles.find(r => r.id === selectedRole)?.name} Interview
             </motion.button>
-          </motion.div>
-        )}
-      </motion.div>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 };
