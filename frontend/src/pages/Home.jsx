@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Code2, Server, Users, ArrowRight, Sparkles, Zap, Shield, Layers } from 'lucide-react';
+import { Code2, Server, Users, ArrowRight, Sparkles, Zap, Shield, Layers, Terminal, Target, Activity, Brain } from 'lucide-react';
 
 const roles = [
   {
@@ -47,6 +47,13 @@ const roles = [
     gradient: 'from-amber-500 to-orange-500',
   },
   {
+    id: 'coding',
+    name: 'Coding',
+    description: 'Algorithms, data structures, LeetCode-style',
+    icon: Terminal,
+    gradient: 'from-emerald-400 to-cyan-500',
+  },
+  {
     id: 'mixed',
     name: 'Mixed',
     description: 'A mix of questions from all specialties',
@@ -61,35 +68,99 @@ const Home = () => {
   const [difficulty, setDifficulty] = React.useState('Medium');
 
   const handleStart = () => {
-    if (selectedRole) {
-      navigate('/interview', { state: { role: selectedRole, difficulty } });
+    if (!selectedRole) return;
+
+    // Check if user is authenticated
+    const token = localStorage.getItem('token');
+    
+    // Determine the target route based on specialty
+    const targetRoute = selectedRole === 'coding' ? '/coding-interview' : '/interview';
+
+    if (!token) {
+      // Defer login: send them to login but remember where they wanted to go
+      navigate('/login', { state: { message: "Please log in to start your interview practice.", from: { pathname: targetRoute, state: { role: selectedRole, difficulty } } } });
+    } else {
+      // Allowed to proceed immediately
+      navigate(targetRoute, { state: { role: selectedRole, difficulty } });
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#fcfcfd] flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center p-4 relative overflow-hidden transition-colors duration-300">
       {/* Background soft blurs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-pink-100/50 rounded-full blur-[120px]" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-100/50 rounded-full blur-[120px]" />
-      <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-yellow-50/50 rounded-full blur-[100px]" />
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-pink-100/50 dark:bg-purple-900/30 rounded-full blur-[120px] pointer-events-none transition-colors" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-100/50 dark:bg-indigo-900/30 rounded-full blur-[120px] pointer-events-none transition-colors" />
+      <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-yellow-50/50 dark:bg-amber-900/10 rounded-full blur-[100px] pointer-events-none transition-colors" />
 
-      <div className="max-w-4xl w-full relative z-10">
+      <div className="max-w-6xl w-full relative z-10 pt-10 pb-20">
+        
+        {/* NEW ABOUT SECTION (HERO) */}
+        <div className="w-full flex flex-col lg:flex-row items-center gap-12 mb-20">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex-1 text-center lg:text-left"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-sm font-semibold mb-6">
+              <Sparkles size={16} /> <span>Next-Gen AI Interview Prep</span>
+            </div>
+            <h1 className="text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6 leading-tight">
+              Master Your Next <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500">Tech Interview.</span>
+            </h1>
+            <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 max-w-2xl mx-auto lg:mx-0">
+              Practice real-world technical and behavioral questions with an advanced AI evaluator. Experience simulated environments, get instant feedback, and land your dream job faster.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+               <button onClick={() => window.scrollTo({ top: document.getElementById('dashboard-section').offsetTop - 100, behavior: 'smooth'})} className="px-8 py-4 bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95">
+                 Start Practicing Now <ArrowRight size={18} />
+               </button>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="flex-1 w-full max-w-md lg:max-w-none grid grid-cols-1 sm:grid-cols-2 gap-4"
+          >
+            {[
+              { title: "Real-time AI Feedback", desc: "Instant evaluation of your answers against industry standards.", icon: Brain, color: "text-purple-500", bg: "bg-purple-50 dark:bg-purple-500/10" },
+              { title: "Role-specific Tracks", desc: "Tailored questions for Frontend, Backend, DevOps, and more.", icon: Target, color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-500/10" },
+              { title: "Coding Environment", desc: "Built-in LeetCode style editor for algorithmic questions.", icon: Terminal, color: "text-emerald-500", bg: "bg-emerald-50 dark:bg-emerald-500/10" },
+              { title: "Performance Metrics", desc: "Track your growth, strengths, and areas to improve.", icon: Activity, color: "text-orange-500", bg: "bg-orange-50 dark:bg-orange-500/10" }
+            ].map((feature, idx) => (
+              <div key={idx} className="glass-card p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:-translate-y-1 transition-transform duration-300">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${feature.bg} border-slate-100 dark:border-white/5 border`}>
+                  <feature.icon size={24} className={feature.color} />
+                </div>
+                <h3 className="font-bold text-slate-900 dark:text-white mb-2">{feature.title}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400">{feature.desc}</p>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* DASHBOARD SECTION */}
         <motion.div
+          id="dashboard-section"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="bg-white/70 backdrop-blur-3xl rounded-[2.5rem] p-8 md:p-12 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.08)] border border-white relative overflow-hidden"
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-3xl rounded-[2.5rem] p-8 md:p-12 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.08)] dark:shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] border border-white dark:border-slate-800 relative overflow-hidden transition-colors duration-300 mx-auto max-w-4xl"
         >
           {/* Header */}
-          <div className="mb-10 text-left">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#94a3b8] mb-3 block">
-              Choose Interview Branch
+          <div className="mb-10 text-center sm:text-left">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-3 block">
+              Dashboard
             </span>
-            <h1 className="text-4xl font-extrabold text-[#0f172a] mb-3 tracking-tight">
+            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 tracking-tight transition-colors">
               Pick your specialty
-            </h1>
-            <p className="text-[#64748b] text-base font-medium">
-              Select a branch below to practice the most relevant interview questions for your role.
+            </h2>
+            <p className="text-slate-500 dark:text-slate-400 text-base font-medium transition-colors">
+              Select a branch below to practice the most relevant questions for your target role.
             </p>
           </div>
 
@@ -105,25 +176,25 @@ const Home = () => {
                   whileTap={{ scale: 0.98 }}
                   className={`relative p-6 rounded-2xl cursor-pointer transition-all duration-300 group overflow-hidden ${
                     isSelected
-                      ? `bg-gradient-to-br ${role.id === 'backend' ? 'from-[#bd4be3] to-[#ef4ec0]' : role.gradient} text-white shadow-xl shadow-indigo-200/50`
-                      : 'bg-[#f8fafc]/80 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 border border-slate-100 hover:border-white'
+                      ? `bg-gradient-to-br ${role.id === 'backend' ? 'from-[#bd4be3] to-[#ef4ec0]' : role.gradient} text-white shadow-xl shadow-indigo-200/50 dark:shadow-indigo-900/20`
+                      : 'bg-[#f8fafc]/80 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-indigo-500/5 border border-slate-100 dark:border-slate-700/50 hover:border-white dark:hover:border-slate-600'
                   }`}
                 >
                   {/* Icon Box */}
                   <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 transition-all ${
-                    isSelected ? 'bg-white/20' : 'bg-[#f1f5f9]'
+                    isSelected ? 'bg-white/20' : 'bg-slate-100 dark:bg-slate-700/50'
                   }`}>
                     <role.icon 
                       size={22} 
-                      className={isSelected ? 'text-white' : 'text-[#64748b] group-hover:text-[#0f172a]'} 
+                      className={isSelected ? 'text-white' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-900 dark:group-hover:text-white transition-colors'} 
                     />
                   </div>
 
                   {/* Text */}
-                  <h3 className={`font-bold text-lg mb-1.5 ${isSelected ? 'text-white' : 'text-[#1e293b]'}`}>
+                  <h3 className={`font-bold text-lg mb-1.5 transition-colors ${isSelected ? 'text-white' : 'text-slate-800 dark:text-slate-200'}`}>
                     {role.name}
                   </h3>
-                  <p className={`text-xs leading-relaxed font-medium ${isSelected ? 'text-white/80' : 'text-[#94a3b8]'}`}>
+                  <p className={`text-xs leading-relaxed font-medium transition-colors ${isSelected ? 'text-white/80' : 'text-slate-400 dark:text-slate-500'}`}>
                     {role.description}
                   </p>
 
@@ -145,15 +216,18 @@ const Home = () => {
           </div>
 
           {/* CTA Button */}
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center pt-2">
             <motion.button
               whileHover={{ scale: 1.02, backgroundColor: '#ea580c' }}
               whileTap={{ scale: 0.98 }}
               onClick={handleStart}
-              className="w-full py-4.5 bg-[#f97316] text-white text-lg font-bold rounded-2xl transition-all shadow-[0_20px_40px_-10px_rgba(249,115,22,0.4)]"
+              className="w-full sm:w-2/3 py-4 bg-[#f97316] text-white text-lg font-bold rounded-2xl transition-all shadow-[0_20px_40px_-10px_rgba(249,115,22,0.4)] dark:shadow-[0_20px_40px_-10px_rgba(249,115,22,0.2)] flex items-center justify-center gap-2"
             >
-              Start {roles.find(r => r.id === selectedRole)?.name} Interview
+              Start {roles.find(r => r.id === selectedRole)?.name} Interview <ArrowRight size={20} />
             </motion.button>
+            {!localStorage.getItem('token') && (
+               <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">You will be asked to log in first.</p>
+            )}
           </div>
         </motion.div>
       </div>
@@ -162,3 +236,4 @@ const Home = () => {
 };
 
 export default Home;
+

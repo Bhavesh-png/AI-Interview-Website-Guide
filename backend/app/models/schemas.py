@@ -20,3 +20,28 @@ class InterviewRecord(BaseModel):
     difficulty: str
     questions: List[dict]
     totalScore: float
+
+class UserCreate(BaseModel):
+    name: str
+    email: str
+    password: str
+    role: Optional[str] = "Full Stack"
+    skillLevel: Optional[str] = "Intermediate"
+    preferredLanguage: Optional[str] = "English"
+    collegeName: Optional[str] = ""
+    yearOfStudy: Optional[str] = ""
+    targetCompany: Optional[str] = ""
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
+
+class UserResponse(BaseModel):
+    id: str
+    name: str
+    email: str
+    role: str
+    
+class Token(BaseModel):
+    access_token: str
+    token_type: str

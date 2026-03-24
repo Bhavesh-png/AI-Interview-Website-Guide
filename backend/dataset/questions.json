@@ -70,5 +70,14 @@
     "question": "How would you design a load balancer for a high-traffic website?",
     "answer": "By using a distribute-and-conquer approach, placing a load balancer (like Nginx or AWS ELB) in front of multiple application servers.",
     "tags": ["loadbalancer", "scalability"]
+  },
+  {
+    "id": 9,
+    "role": "coding",
+    "category": "Algorithms",
+    "difficulty": "medium",
+    "question": "Given a string `s`, find the length of the longest substring without repeating characters.",
+    "answer": "Use a sliding window approach with a hash set to track character indices, maintaining O(N) time complexity.",
+    "tags": ["coding", "string", "hashset"]
   }
 ]

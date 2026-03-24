@@ -19,7 +19,10 @@ def get_random_question(role: str, difficulty: str = None):
         filtered = [q for q in questions if q["role"].lower() == role.lower()]
     
     if difficulty:
-        filtered = [q for q in filtered if q.get("difficulty", "").lower() == difficulty.lower()]
+        difficulty_match = [q for q in filtered if q.get("difficulty", "").lower() == difficulty.lower()]
+        if difficulty_match:
+            filtered = difficulty_match
+        # If no questions match the specific difficulty, we just fall back and use the role subset (ignoring difficulty)
         
     if not filtered:
         return None
