@@ -1,113 +1,161 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Award, CheckCircle2, AlertCircle, TrendingUp, RotateCcw } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { Award, CheckCircle2, AlertCircle, TrendingUp, RotateCcw, Star } from 'lucide-react';
+
+const ScoreRing = ({ score }) => {
+  const pct = Math.min(Math.max(score / 10, 0), 1);
+  const radius = 52;
+  const circumference = 2 * Math.PI * radius;
+  const dash = pct * circumference;
+
+  const color = score >= 8 ? '#34d399' : score >= 5 ? '#818cf8' : '#f87171';
+
+  return (
+    <div className="relative w-36 h-36 mx-auto">
+      <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r={radius} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="8" />
+        <motion.circle
+          cx="60" cy="60" r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth="8"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: circumference - dash }}
+          transition={{ duration: 1.2, ease: 'easeOut', delay: 0.3 }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-4xl font-black text-white">{score}</span>
+        <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">/ 10</span>
+      </div>
+    </div>
+  );
+};
+
+const getScoreLabel = (score) => {
+  if (score >= 9) return { label: 'Exceptional', color: 'text-emerald-400' };
+  if (score >= 7) return { label: 'Strong', color: 'text-emerald-400' };
+  if (score >= 5) return { label: 'Good', color: 'text-indigo-400' };
+  if (score >= 3) return { label: 'Needs Work', color: 'text-amber-400' };
+  return { label: 'Weak', color: 'text-red-400' };
+};
 
 const Result = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { result, question, answer } = location.state || {};
 
-  // Parse simulated OpenAI response if needed
-  const evaluation = result?.content 
-    ? { score: 7, feedback: result.content, improvement: "Practice more on technical depth." } // Mock parsing
-    : (result || { score: 0, feedback: "Evaluation failed", improvement: "N/A" });
+  const evaluation = result?.content
+    ? { score: 7, feedback: result.content, improvement: 'Practice more on technical depth.' }
+    : (result || { score: 0, feedback: 'Evaluation not available.', improvement: 'N/A' });
 
-  const chartData = [
-    { name: 'Score', value: evaluation.score },
-    { name: 'Remaining', value: 10 - evaluation.score },
-  ];
+  const scoreInfo = getScoreLabel(evaluation.score);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
+  };
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
 
   return (
-    <div className="max-w-4xl mx-auto py-8">
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="text-center mb-12"
-      >
-        <div className="inline-flex p-4 rounded-full bg-indigo-500/10 mb-4">
-          <Award className="text-indigo-400" size={48} />
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="max-w-4xl mx-auto px-4 py-8"
+    >
+      {/* Header */}
+      <motion.div variants={itemVariants} className="text-center mb-10">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl mb-4">
+          <Award className="text-indigo-400" size={32} />
         </div>
-        <h1 className="text-4xl font-bold italic mb-2">Interview Completed!</h1>
-        <p className="text-slate-400">Here is your performance overview</p>
+        <h1 className="text-4xl font-extrabold mb-2 bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+          Interview Completed!
+        </h1>
+        <p className="text-slate-400">Here's your performance breakdown</p>
       </motion.div>
 
-      <div className="grid md:grid-cols-3 gap-8 mb-8">
-        <div className="md:col-span-1 glass-card p-8 flex flex-col items-center justify-center text-center">
-          <div className="w-full h-48 relative">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={chartData}
-                  innerRadius={60}
-                  outerRadius={80}
-                  startAngle={90}
-                  endAngle={450}
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  <Cell fill="#6366f1" />
-                  <Cell fill="rgba(255,255,255,0.05)" />
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-4xl font-black text-white">{evaluation.score}</span>
-              <span className="text-xs text-slate-500 font-bold uppercase tracking-widest">Out of 10</span>
-            </div>
+      {/* Score + Feedback grid */}
+      <div className="grid md:grid-cols-3 gap-5 mb-5">
+        {/* Score Card */}
+        <motion.div variants={itemVariants} className="glass-card p-8 flex flex-col items-center justify-center text-center md:col-span-1">
+          <ScoreRing score={evaluation.score} />
+          <div className="mt-5">
+            <p className={`text-lg font-bold ${scoreInfo.color}`}>{scoreInfo.label}</p>
+            <p className="text-slate-500 text-sm mt-0.5">Overall Score</p>
           </div>
-          <h3 className="font-bold text-lg mt-4">Overall Score</h3>
-        </div>
+          <div className="mt-4 flex gap-1">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Star
+                key={i}
+                size={14}
+                className={i <= Math.round(evaluation.score / 2) ? 'text-amber-400 fill-amber-400' : 'text-slate-700'}
+              />
+            ))}
+          </div>
+        </motion.div>
 
-        <div className="md:col-span-2 space-y-6">
-          <div className="glass-card p-6">
-            <div className="flex items-center gap-2 mb-4 text-emerald-400 font-bold italic">
-              <CheckCircle2 size={24} /> Feedback
+        {/* Feedback cards */}
+        <div className="md:col-span-2 space-y-4">
+          <motion.div variants={itemVariants} className="glass-card p-6">
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="p-1.5 bg-emerald-500/15 rounded-lg border border-emerald-500/20">
+                <CheckCircle2 size={16} className="text-emerald-400" />
+              </div>
+              <h3 className="font-semibold text-emerald-400">AI Feedback</h3>
             </div>
-            <p className="text-slate-300 leading-relaxed">
-              {evaluation.feedback}
-            </p>
-          </div>
+            <p className="text-slate-300 text-sm leading-relaxed">{evaluation.feedback}</p>
+          </motion.div>
 
-          <div className="glass-card p-6">
-            <div className="flex items-center gap-2 mb-4 text-amber-400 font-bold italic">
-              <AlertCircle size={24} /> Points for Improvement
+          <motion.div variants={itemVariants} className="glass-card p-6">
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="p-1.5 bg-amber-500/15 rounded-lg border border-amber-500/20">
+                <AlertCircle size={16} className="text-amber-400" />
+              </div>
+              <h3 className="font-semibold text-amber-400">How to Improve</h3>
             </div>
-            <p className="text-slate-300 leading-relaxed">
-              {evaluation.improvement}
-            </p>
-          </div>
+            <p className="text-slate-300 text-sm leading-relaxed">{evaluation.improvement}</p>
+          </motion.div>
         </div>
       </div>
 
-      <div className="glass-card p-8 mb-12">
-        <h3 className="font-bold text-xl mb-6 flex items-center gap-2 italic">
-          <TrendingUp className="text-indigo-400" /> Comparison
-        </h3>
-        <div className="space-y-6 text-sm">
-          <div className="rounded-2xl bg-white/5 p-6 border border-white/5">
-            <span className="block text-indigo-400 font-bold uppercase mb-2 tracking-widest text-[10px]">Your Answer</span>
-            <p className="leading-relaxed text-slate-300 italic">"{answer}"</p>
+      {/* Answer comparison */}
+      <motion.div variants={itemVariants} className="glass-card p-6 mb-8">
+        <div className="flex items-center gap-2.5 mb-5">
+          <div className="p-1.5 bg-indigo-500/15 rounded-lg border border-indigo-500/20">
+            <TrendingUp size={16} className="text-indigo-400" />
           </div>
-          <div className="rounded-2xl bg-indigo-500/5 p-6 border border-indigo-500/20">
-            <span className="block text-indigo-400 font-bold uppercase mb-2 tracking-widest text-[10px]">Ideal Points</span>
-            <p className="leading-relaxed text-slate-300">
-              {question?.answer}
-            </p>
+          <h3 className="font-semibold text-slate-200">Answer Comparison</h3>
+        </div>
+        <div className="grid md:grid-cols-2 gap-4 text-sm">
+          <div className="bg-slate-950/50 rounded-xl p-5 border border-white/5">
+            <span className="block text-[10px] text-slate-600 font-bold uppercase tracking-widest mb-3">Your Answer</span>
+            <p className="text-slate-300 leading-relaxed italic">"{answer || 'No answer recorded.'}"</p>
+          </div>
+          <div className="bg-indigo-500/5 rounded-xl p-5 border border-indigo-500/15">
+            <span className="block text-[10px] text-indigo-500 font-bold uppercase tracking-widest mb-3">Ideal Points</span>
+            <p className="text-slate-300 leading-relaxed">{question?.answer || 'N/A'}</p>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="flex justify-center">
-        <button 
+      {/* CTA */}
+      <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 justify-center">
+        <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl transition-all shadow-xl shadow-indigo-600/20 active:scale-95"
+          className="flex items-center justify-center gap-2 px-8 py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl transition-all shadow-xl shadow-indigo-600/25 active:scale-95"
         >
-          <RotateCcw size={20} /> Try Another Question
+          <RotateCcw size={18} />
+          Try Another Question
         </button>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
