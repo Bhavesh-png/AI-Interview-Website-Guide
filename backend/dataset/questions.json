@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "role": "frontend",
+    "category": "React",
+    "difficulty": "easy",
+    "question": "What is the difference between functional and class components in React?",
+    "answer": "Functional components are simpler, use Hooks for state, while class components use lifecycle methods and 'this'.",
+    "tags": ["react", "components"]
+  },
+  {
+    "id": 2,
+    "role": "frontend",
+    "category": "JavaScript",
+    "difficulty": "medium",
+    "question": "Explain the concept of 'closures' in JavaScript.",
+    "answer": "A closure is the combination of a function bundled together with references to its surrounding state (lexical environment).",
+    "tags": ["js", "closures"]
+  },
+  {
+    "id": 3,
+    "role": "backend",
+    "category": "FastAPI",
+    "difficulty": "easy",
+    "question": "What are the advantages of using FastAPI over Flask?",
+    "answer": "FastAPI is faster, handles async/await natively, and provides automatic Swagger documentation.",
+    "tags": ["fastapi", "python"]
+  },
+  {
+    "id": 4,
+    "role": "backend",
+    "category": "Database",
+    "difficulty": "medium",
+    "question": "What is the difference between SQL and NoSQL databases?",
+    "answer": "SQL is relational and structured, while NoSQL is non-relational, flexible, and often document-oriented.",
+    "tags": ["db", "sql", "nosql"]
+  },
+  {
+    "id": 5,
+    "role": "hr",
+    "category": "Behavioral",
+    "difficulty": "easy",
+    "question": "Tell me about yourself.",
+    "answer": "Introduction focusing on professional background, key skills, and career goals.",
+    "tags": ["intro", "personal"]
+  }
+]
